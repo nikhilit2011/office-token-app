@@ -12,9 +12,19 @@
       </tr>
     </thead>
     <tbody id="live-token-body">
-      <% @tokens.each_with_index do |token, index| %>
-        <%= render partial: "token_row", locals: { token: token, index: index + 1 } %>
-      <% end %>
+      <%= render partial: "token_rows", locals: { tokens: @tokens } %>
     </tbody>
   </table>
 </div>
+
+<script>
+  function refreshTokens() {
+    fetch('/tokens/refresh_in_progress')
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById("live-token-body").innerHTML = html;
+      });
+  }
+
+  setInterval(refreshTokens, 5000); // refresh every 5 seconds
+</script>

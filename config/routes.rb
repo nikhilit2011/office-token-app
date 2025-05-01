@@ -14,6 +14,11 @@ Rails.application.routes.draw do
   
   get "tokens/:id/print", to: "tokens#print", as: :print_token
   
+  get 'tokens/refresh_in_progress', to: 'tokens#refresh_in_progress'
+  
+  get "tokens/refresh_counter_dashboard", to: "tokens#refresh_counter_dashboard"
+  
+  
   namespace :admin do
     resources :users, except: [:show]
   end
