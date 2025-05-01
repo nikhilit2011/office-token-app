@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Office Token Management</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %> <!-- ✅ This is critical -->
+  </head>
+  
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Office Token System</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+          <ul class="navbar-nav">
+            <% if user_signed_in? %>
+              <% if current_user.token_operator? %>
+                <li class="nav-item">
+                  <%= link_to "Generate Token", new_token_path, class: "nav-link" %>
+                </li>
+              <% elsif current_user.counter_incharge? %>
+                <li class="nav-item">
+                  <%= link_to "Counter Dashboard", "#", class: "nav-link" %>
+                </li>
+              <% elsif current_user.admin? %>
+                <li class="nav-item">
+                  <%= link_to "Admin Panel", "#", class: "nav-link" %>
+                </li>
+              <% end %>
+              <li class="nav-item">
+				<%= link_to "Logout", custom_logout_path, class: "nav-link" %>
+                
+              </li>
+            <% else %>
+              <li class="nav-item">
+                <%= link_to "Login", new_user_session_path, class: "nav-link" %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <% if notice %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <%= notice %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% end %>
+
+      <% if alert %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <%= alert %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% end %>
+
+      <%= yield %>
+    </div>
+	<%= javascript_include_tag "application", type: "module", "data-turbo-track": "reload", defer: true %>
+	
+  </body>
+</html>

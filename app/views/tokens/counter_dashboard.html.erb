@@ -1,0 +1,31 @@
+<div class="container">
+  <h2 class="mb-4 text-center">Counter Dashboard – <%= current_user.assigned_counter %></h2>
+
+  <table class="table table-bordered table-striped">
+    <thead class="table-light">
+      <tr>
+        <th>Token #</th>
+        <th>Applicant</th>
+        <th>Vehicle</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @tokens.each do |token| %>
+        <tr>
+          <td><%= token.token_number %></td>
+          <td><%= token.applicant_name %></td>
+          <td><%= token.vehicle_number %></td>
+          <td><%= token.status %></td>
+          <td>
+            <%= form_with url: update_token_status_path(token), method: :patch, local: true do |f| %>
+              <%= f.select :status, Token::STATUSES, { selected: token.status }, class: "form-select form-select-sm d-inline w-auto" %>
+              <%= f.submit "Update", class: "btn btn-sm btn-primary ms-2" %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

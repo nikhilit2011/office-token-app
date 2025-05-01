@@ -1,0 +1,20 @@
+<div class="container">
+  <h2 class="text-center mb-4">Live Token Display (In Progress)</h2>
+
+  <table class="table table-bordered table-striped text-center">
+    <thead class="table-dark">
+      <tr>
+        <th>Sr. No.</th>
+        <th>Token No.</th>
+        <th>Applicant Name</th>
+        <th>Vehicle Number</th>
+        <th>Counter</th>
+      </tr>
+    </thead>
+    <tbody id="live-token-body">
+      <% @tokens.each_with_index do |token, index| %>
+        <%= render partial: "token_row", locals: { token: token, index: index + 1 } %>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,20 @@
+<%= form_with model: token, url: tokens_path, method: :post, html: { target: "_blank", data: { turbo: false } }, local: true do |f| %>
+  <div class="mb-3">
+    <%= f.label :applicant_name, class: "form-label" %>
+    <%= f.text_field :applicant_name, class: "form-control", required: true %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :vehicle_number, class: "form-label" %>
+    <%= f.text_field :vehicle_number, class: "form-control", required: true %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :counter, class: "form-label" %>
+    <%= f.select :counter, Token::COUNTERS, {}, class: "form-select", required: true %>
+  </div>
+
+  <div class="d-grid">
+    <%= f.submit "Generate Token", class: "btn btn-primary" %>
+  </div>
+<% end %>
