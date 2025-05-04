@@ -15,16 +15,31 @@
       <%= render partial: "tokens/dashboard_rows", locals: { tokens: @tokens } %>
     </tbody>
   </table>
+
+  <!-- ✅ Correct audio path to audios/new_token_generated.mp3 -->
+  <audio id="token-alert" src="<%= asset_path('audios/new_token_generated.mp3') %>" preload="auto"></audio>
 </div>
 
 <script>
+  let lastTokenId = null;
+
   function refreshCounterDashboard() {
     fetch("/tokens/refresh_counter_dashboard")
       .then(response => response.text())
       .then(html => {
-        document.getElementById("counter-dashboard-body").innerHTML = html;
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = html;
+        const newRows = tempDiv.querySelectorAll("tr");
+        const newTokenId = newRows[0]?.dataset.tokenId;
+
+        if (lastTokenId && newTokenId && newTokenId !== lastTokenId) {
+          document.getElementById("token-alert").play();
+        }
+
+        lastTokenId = newTokenId;
+        document.getElementById("counter-dashboard-body").innerHTML = tempDiv.innerHTML;
       });
   }
 
-  setInterval(refreshCounterDashboard, 5000); // every 5 seconds
+  setInterval(refreshCounterDashboard, 5000);
 </script>

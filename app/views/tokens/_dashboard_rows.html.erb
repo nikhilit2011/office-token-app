@@ -1,5 +1,5 @@
 <% tokens.each do |token| %>
-  <tr>
+  <tr data-token-id="<%= token.id %>">
     <td><%= token.token_number %></td>
     <td><%= token.applicant_name %></td>
     <td><%= token.vehicle_number %></td>
