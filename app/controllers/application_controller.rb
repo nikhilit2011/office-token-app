@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
     when "token_operator"
       new_token_path
     when "counter_incharge"
-      counter_dashboard_path
+      live_tokens_path
     else
       root_path
     end
