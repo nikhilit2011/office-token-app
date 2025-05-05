@@ -1,0 +1,17 @@
+# In your `app/views/layouts/_navbar.html.erb` (or wherever your navbar is defined), add this:
+
+<% if current_user.counter_incharge? %>
+  <li class="nav-item">
+    <%= link_to "Live Tokens", live_tokens_path, class: "nav-link" %>
+  </li>
+  <li class="nav-item">
+    <%= link_to "All Tokens", all_tokens_path, class: "nav-link" %>
+  </li>
+<% elsif current_user.token_operator? %>
+  <li class="nav-item">
+    <%= link_to "Generate Token", new_token_path, class: "nav-link" %>
+  </li>
+  <li class="nav-item">
+    <%= link_to "Public Display", public_display_path, class: "nav-link" %>
+  </li>
+<% end %>

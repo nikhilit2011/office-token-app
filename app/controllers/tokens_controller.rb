@@ -1,7 +1,7 @@
 class TokensController < ApplicationController
   before_action :authenticate_user!
   before_action :authorize_token_operator, only: [:new, :create]
-  before_action :authorize_counter_incharge, only: [:counter_dashboard, :update_status]
+  before_action :authorize_counter_incharge, only: [:all_tokens, :live_tokens, :refresh_live_tokens, :update_status]
 
   def new
     @token = Token.new
@@ -10,7 +10,7 @@ class TokensController < ApplicationController
   def create
     @token = current_user.tokens.build(token_params)
     if @token.save
-      redirect_to print_token_path(@token)  # Opens PDF
+      redirect_to print_token_path(@token)
     else
       render :new, status: :unprocessable_entity
     end
@@ -42,27 +42,32 @@ class TokensController < ApplicationController
     send_data pdf.render, filename: "token_#{@token.token_number}.pdf", type: 'application/pdf', disposition: 'inline'
   end
 
-  def counter_dashboard
+  def all_tokens
     @tokens = Token.where(counter: current_user.assigned_counter)
                    .order(created_at: :desc)
                    .page(params[:page])
                    .per(10)
   end
 
-  def refresh_counter_dashboard
+  def live_tokens
     @tokens = Token.where(counter: current_user.assigned_counter)
+                   .where(check_date: Date.today)
                    .order(created_at: :desc)
-                   .page(params[:page])
-                   .per(10)
+  end
+
+  def refresh_live_tokens
+    @tokens = Token.where(counter: current_user.assigned_counter)
+                   .where(check_date: Date.today)
+                   .order(created_at: :desc)
     render partial: "tokens/dashboard_rows", locals: { tokens: @tokens }
   end
 
   def update_status
     @token = Token.find(params[:id])
     if @token.update(status: params[:status])
-      redirect_to counter_dashboard_path, notice: "Status updated."
+      redirect_to all_tokens_path, notice: "Status updated."
     else
-      redirect_to counter_dashboard_path, alert: "Failed to update."
+      redirect_to all_tokens_path, alert: "Failed to update."
     end
   end
 

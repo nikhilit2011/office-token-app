@@ -1,0 +1,27 @@
+<!-- app/views/tokens/all_tokens.html.erb -->
+<div class="container">
+  <h2 class="mb-4 text-center">All Tokens – <%= current_user.assigned_counter %></h2>
+
+  <div class="text-end mb-3">
+    <%= link_to "Live Tokens", live_tokens_path, class: "btn btn-outline-secondary" %>
+  </div>
+
+  <table class="table table-bordered table-striped">
+    <thead class="table-light">
+      <tr>
+        <th>Token #</th>
+        <th>Applicant</th>
+        <th>Vehicle</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: "tokens/dashboard_rows", locals: { tokens: @tokens } %>
+    </tbody>
+  </table>
+
+  <div class="text-center mt-3">
+    <%= paginate @tokens %>
+  </div>
+</div>
