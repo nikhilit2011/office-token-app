@@ -5,5 +5,14 @@
     <td><%= token.applicant_name %></td>
     <td><%= token.vehicle_number %></td>
     <td><%= token.counter %></td>
+    <td>
+      <%= case token.counter
+          when "T/R" then "Window 4"
+          when "New Registration" then "Window 5"
+          when "Driving Licence" then "Window 11"
+          when "Enforcement" then "Window 6"
+          else "-"
+          end %>
+    </td>
   </tr>
 <% end %>
