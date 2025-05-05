@@ -43,11 +43,17 @@ class TokensController < ApplicationController
   end
 
   def counter_dashboard
-    @tokens = Token.where(counter: current_user.assigned_counter).order(created_at: :desc)
+    @tokens = Token.where(counter: current_user.assigned_counter)
+                   .order(created_at: :desc)
+                   .page(params[:page])
+                   .per(10)
   end
-  
+
   def refresh_counter_dashboard
-    @tokens = Token.where(counter: current_user.assigned_counter).order(created_at: :desc)
+    @tokens = Token.where(counter: current_user.assigned_counter)
+                   .order(created_at: :desc)
+                   .page(params[:page])
+                   .per(10)
     render partial: "tokens/dashboard_rows", locals: { tokens: @tokens }
   end
 

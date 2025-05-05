@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   get "tokens/refresh_counter_dashboard", to: "tokens#refresh_counter_dashboard"
   
   
+  
   namespace :admin do
     resources :users, except: [:show]
   end

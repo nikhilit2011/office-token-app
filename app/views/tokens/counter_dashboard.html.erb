@@ -16,15 +16,18 @@
     </tbody>
   </table>
 
-  <!-- ✅ Correct audio path to audios/new_token_generated.mp3 -->
-  <audio id="token-alert" src="<%= asset_path('new_token_generated.mp3') %>" preload="auto"></audio>
+  <div id="pagination-links" class="text-center mt-3">
+    <%= paginate @tokens, remote: true %>
+  </div>
 </div>
 
 <script>
   let lastTokenId = null;
 
   function refreshCounterDashboard() {
-    fetch("/tokens/refresh_counter_dashboard")
+    const currentPage = new URLSearchParams(window.location.search).get('page') || 1;
+
+    fetch(`/tokens/refresh_counter_dashboard?page=${currentPage}`)
       .then(response => response.text())
       .then(html => {
         const tempDiv = document.createElement("div");
@@ -33,7 +36,7 @@
         const newTokenId = newRows[0]?.dataset.tokenId;
 
         if (lastTokenId && newTokenId && newTokenId !== lastTokenId) {
-          document.getElementById("token-alert").play();
+          // Removed audio play
         }
 
         lastTokenId = newTokenId;
