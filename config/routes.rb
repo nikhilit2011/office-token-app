@@ -1,44 +1,41 @@
 Rails.application.routes.draw do
+  # Devise authentication
   devise_for :users
 
-  # Token generation (for operator)
-  resources :tokens, only: [:new, :create] do
-    member do
-      get :print
-      patch :update_status
-    end
+  # Token creation routes
+  resources :tokens, only: [:new, :create]
 
-    collection do
-      get :all_tokens
-      get :live_tokens
-      get :refresh_live_tokens
-      get :public_display
-      get :refresh_in_progress
-    end
-  end
-
-  # Legacy and renamed routes for clarity
-  get "counter_dashboard", to: redirect("tokens/all_tokens") # old name redirect
-
-  # Admin routes
-  namespace :admin do
-    resources :users, except: [:show]
-  end
-
-  # Authenticated user root (e.g., token operator lands on generate token)
+  # Root paths
   authenticated :user do
     root to: "tokens#new", as: :authenticated_root
   end
 
-  # Devise logout
-  devise_scope :user do
-    get "/logout", to: "devise/sessions#destroy", as: :custom_logout
-  end
-
-  # Default unauthenticated root
   devise_scope :user do
     unauthenticated do
       root to: "devise/sessions#new", as: :unauthenticated_root
     end
+
+    get "/logout", to: "devise/sessions#destroy", as: :custom_logout
+  end
+
+  # Counter Incharge Dashboards
+  get "all_tokens", to: "tokens#all_tokens"
+  get "live_tokens", to: "tokens#live_tokens"
+  get "tokens/refresh_live_tokens", to: "tokens#refresh_live_tokens"
+  get "tokens/refresh_counter_dashboard", to: "tokens#refresh_counter_dashboard" # If used elsewhere
+
+  # Status update
+  patch "tokens/:id/update_status", to: "tokens#update_status", as: :update_token_status
+
+  # Public token display
+  get "public_display", to: "tokens#public_display"
+  get "tokens/refresh_in_progress", to: "tokens#refresh_in_progress"
+
+  # Token printing
+  get "tokens/:id/print", to: "tokens#print", as: :print_token
+
+  # Admin namespace
+  namespace :admin do
+    resources :users, except: [:show]
   end
 end

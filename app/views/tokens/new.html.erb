@@ -1,5 +1,11 @@
+<% if current_user.token_operator? %>
+  <div class="d-flex justify-content-between mb-3" style="max-width: 600px; margin: 0 auto;">
+    <%= link_to "Generate New Token", new_token_path, class: "btn btn-success" %>
+    <%= link_to "Public Display Board", public_display_path, class: "btn btn-outline-primary", target: "_blank" %>
+  </div>
+<% end %>
+
 <div class="container" style="max-width: 600px;">
   <h2 class="mb-4 text-center">Generate Token</h2>
-
   <%= render "form", token: @token %>
 </div>
