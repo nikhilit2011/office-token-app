@@ -58,10 +58,11 @@ class TokensController < ApplicationController
 
   def refresh_live_tokens
     @tokens = Token.where(counter: current_user.assigned_counter)
-                   .where("DATE(created_at) = ?", Date.today)
+                   .where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day)
                    .order(created_at: :desc)
     render partial: "tokens/dashboard_rows", locals: { tokens: @tokens }
   end
+  
 
   
   
