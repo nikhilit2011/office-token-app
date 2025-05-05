@@ -32,17 +32,25 @@
       .then(html => {
         const tempDiv = document.createElement("div");
         tempDiv.innerHTML = html;
-        const newRows = tempDiv.querySelectorAll("tr");
-        const newTokenId = newRows[0]?.dataset.tokenId;
 
+        const newRows = tempDiv.querySelectorAll("tr");
+        const tbody = document.getElementById("counter-dashboard-body");
+
+        // Clear old rows
+        tbody.innerHTML = "";
+
+        // Append each row individually to preserve spacing and styles
+        newRows.forEach(row => tbody.appendChild(row));
+
+        const newTokenId = newRows[0]?.dataset.tokenId;
         if (lastTokenId && newTokenId && newTokenId !== lastTokenId) {
-          // Removed audio play
+          // sound alert removed
         }
 
         lastTokenId = newTokenId;
-        document.getElementById("counter-dashboard-body").innerHTML = tempDiv.innerHTML;
       });
   }
 
   setInterval(refreshCounterDashboard, 5000);
 </script>
+
