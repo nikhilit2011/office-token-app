@@ -62,14 +62,37 @@ class TokensController < ApplicationController
     render partial: "tokens/dashboard_rows", locals: { tokens: @tokens }
   end
 
+  
+  
+  
   def update_status
     @token = Token.find(params[:id])
+
+    # Ensure the user is only updating their assigned counter
+    unless @token.counter == current_user.assigned_counter
+      redirect_to live_tokens_path, alert: "Access denied."
+      return
+    end
+
+    # Proceed only if setting status to "In Progress"
+    if params[:status] == "In Progress"
+      in_progress_tokens = Token.where(counter: current_user.assigned_counter, status: "In Progress")
+                                .order(:created_at)
+
+      if in_progress_tokens.count >= 4
+        # Revert the earliest (first) one back to Pending
+        oldest_token = in_progress_tokens.first
+        oldest_token.update(status: "Pending")
+      end
+    end
+
     if @token.update(status: params[:status])
-      redirect_to all_tokens_path, notice: "Status updated."
+      redirect_to live_tokens_path, notice: "Status updated."
     else
-      redirect_to all_tokens_path, alert: "Failed to update."
+      redirect_to live_tokens_path, alert: "Failed to update."
     end
   end
+  
 
   def public_display
     @tokens = Token.where(status: "In Progress").order(created_at: :desc)
