@@ -51,7 +51,7 @@ class TokensController < ApplicationController
 
   def live_tokens
     @tokens = Token.where(counter: current_user.assigned_counter)
-                   .where("DATE(created_at) = ?", Date.today)
+                   .where("DATE(created_at) = ?", Time.zone.today)
                    .order(created_at: :desc)
   end
 
