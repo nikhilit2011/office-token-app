@@ -1,3 +1,10 @@
+# config/application.rb
+
+require_relative "boot"
+require "rails/all"  # ✅ This is what defines Rails::Application
+
+Bundler.require(*Rails.groups)
+
 module OfficeTokenBootstrapApp
   class Application < Rails::Application
     config.load_defaults 7.1
