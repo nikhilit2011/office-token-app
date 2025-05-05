@@ -34,23 +34,23 @@
         tempDiv.innerHTML = html;
 
         const newRows = tempDiv.querySelectorAll("tr");
-        const tbody = document.getElementById("counter-dashboard-body");
+        const dashboardBody = document.getElementById("counter-dashboard-body");
+        dashboardBody.innerHTML = "";
 
-        // Clear old rows
-        tbody.innerHTML = "";
+        newRows.forEach(row => {
+          dashboardBody.appendChild(row);
+        });
 
-        // Append each row individually to preserve spacing and styles
-        newRows.forEach(row => tbody.appendChild(row));
-
+        // update lastTokenId for optional alert/sound later
         const newTokenId = newRows[0]?.dataset.tokenId;
-        if (lastTokenId && newTokenId && newTokenId !== lastTokenId) {
-          // sound alert removed
-        }
-
-        lastTokenId = newTokenId;
+        lastTokenId = newTokenId || lastTokenId;
+      })
+      .catch(error => {
+        console.error("Error refreshing dashboard:", error);
       });
   }
 
   setInterval(refreshCounterDashboard, 5000);
 </script>
+
 
